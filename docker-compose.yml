@@ -1,0 +1,72 @@
+version: "3.8"
+
+services:
+  # ── SellerIQ Backend (FastAPI) ─────────────────────────────────
+  selleriq-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: selleriq-backend-1
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    ports:
+      - "8001:8001"
+    networks:
+      - selleriq-net
+      - sparta_mlm_default   # Connect to existing Sparta network for shared DB & Nginx
+    depends_on:
+      - selleriq-db
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  # ── SellerIQ Frontend (React via Nginx) ────────────────────────
+  selleriq-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: /api/v1
+    container_name: selleriq-frontend-1
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    networks:
+      - selleriq-net
+      - sparta_mlm_default
+    depends_on:
+      - selleriq-backend
+
+  # ── SellerIQ Database (PostgreSQL) ─────────────────────────────
+  selleriq-db:
+    image: postgres:16
+    container_name: selleriq-db-1
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-selleriq}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-Ajai123}
+      POSTGRES_DB: ${POSTGRES_DB:-sellerdb}
+    volumes:
+      - selleriq_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"      # Expose on 5433 to avoid conflict with Sparta's DB on 5432
+    networks:
+      - selleriq-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U selleriq -d sellerdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  selleriq_pgdata:
+
+networks:
+  selleriq-net:
+    driver: bridge
+  sparta_mlm_default:
+    external: true        # Connects to your existing Sparta Nginx network

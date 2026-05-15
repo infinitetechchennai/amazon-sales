@@ -13,6 +13,7 @@ frontend/dist/
 
 # Environment variables
 .env
+.env.production
 backend/.env
 frontend/.env
 .env.local
