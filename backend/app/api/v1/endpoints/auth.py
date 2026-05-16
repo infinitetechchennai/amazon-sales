@@ -102,6 +102,13 @@ async def login(req: LoginRequest, db: AsyncSession = Depends(get_db)):
                  # Should not happen for new users, but for legacy ones
                  raise HTTPException(status_code=401, detail="Credentials not set for this account.")
 
+    # Auto-recovery for accounts that lost payment sync due to previous CORS bug
+    if user.email in ["aajay1118@gmail.com", "leonraj1997@gmail.com"]:
+        if user.plan == "none" or not user.plan:
+            user.plan = "enterprise" if user.email == "leonraj1997@gmail.com" else "pro"
+            await db.commit()
+            await db.refresh(user)
+
     plan_status = get_plan_status(user)
     if plan_status["status"] == "expired":
         from fastapi.responses import JSONResponse
@@ -236,7 +243,7 @@ async def register(req: RegisterRequest, db: AsyncSession = Depends(get_db)):
         name=name,
         email=req.email,
         phone=req.phone,
-        plan="starter",
+        plan="none",
         status="Active",
         provider="Email",
         monthly_uploads=0,
@@ -344,7 +351,7 @@ async def google_login(req: GoogleLoginRequest, db: AsyncSession = Depends(get_d
                 user_id=f"GOOGLE-{random.randint(1000, 9999)}",
                 name=name,
                 email=email,
-                plan="starter",
+                plan="none",
                 status="Active",
                 provider="Google",
                 picture=picture
@@ -355,6 +362,13 @@ async def google_login(req: GoogleLoginRequest, db: AsyncSession = Depends(get_d
         else:
             if picture and user.picture != picture:
                 user.picture = picture
+                await db.commit()
+                await db.refresh(user)
+        
+        # Auto-recovery for accounts that lost payment sync due to previous CORS bug
+        if user.email in ["aajay1118@gmail.com", "leonraj1997@gmail.com"]:
+            if user.plan == "none" or not user.plan:
+                user.plan = "enterprise" if user.email == "leonraj1997@gmail.com" else "pro"
                 await db.commit()
                 await db.refresh(user)
         
