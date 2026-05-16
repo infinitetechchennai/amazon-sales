@@ -3,7 +3,7 @@ import axios from 'axios';
 // In production (Vercel), set VITE_API_BASE_URL to your Render backend URL
 // e.g. https://selleriq-api.onrender.com/api/v1
 // In local dev, falls back to /api/v1 (proxied by Vite)
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1';
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1';
 
 const apiInstance = axios.create({
   baseURL: API_BASE_URL,
