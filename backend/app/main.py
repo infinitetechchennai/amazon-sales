@@ -1,5 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import Response
 from app.api.v1.router import api_router
 from app.core.config import settings
 from app.db.session import engine
@@ -10,13 +12,14 @@ from sqlalchemy import text
 
 app = FastAPI(title=settings.PROJECT_NAME)
 
-# Set up CORS
+# ── Bulletproof CORS: always allow all origins ──────────────────────────────
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.ALLOWED_ORIGINS,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 
