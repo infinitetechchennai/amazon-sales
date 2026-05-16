@@ -18,9 +18,15 @@ const DemoUpload = ({ onFileSelect, ingestionStatus, onLimitHit }) => {
       if (onLimitHit) onLimitHit();
       return;
     }
-    // Demo enforces 5MB limit unconditionally
-    if (file.size > 5 * 1024 * 1024) {
-      alert(`Demo Trial limit exceeded (5MB). Subscription required for larger datasets.`);
+    // Demo enforces 1MB limit unconditionally
+    if (file.size > 1 * 1024 * 1024) {
+      alert(`Demo Trial limit exceeded (1MB). Subscription required for larger datasets.`);
+      return;
+    }
+
+    // Ensure valid MTR format (.csv)
+    if (!file.name.toLowerCase().endsWith('.csv')) {
+      alert(`Analysis failed. Ensure valid MTR format.`);
       return;
     }
     // Reset input so same file can be selected twice if needed
@@ -95,7 +101,7 @@ const DemoUpload = ({ onFileSelect, ingestionStatus, onLimitHit }) => {
             <Play size={14} fill="currentColor" /> INTERACTIVE DEMO MODE
           </div>
           <h1 style={{ fontSize: 36, fontWeight: 900, marginBottom: 12 }}>Experience the Engine</h1>
-          <p style={{ color: "#94a3b8", fontSize: 16 }}>Upload a sample file to see a live preview. Limited to 5MB (1 Month Duration).</p>
+          <p style={{ color: "#94a3b8", fontSize: 16 }}>Upload a sample file to see a live preview. Limited to 1MB (1 Month Duration).</p>
         </div>
 
         <div 
