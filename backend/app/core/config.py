@@ -38,6 +38,6 @@ class Settings:
     GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID", "")
     
     # CORS Security
-    ALLOWED_ORIGINS: list = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:5001,http://127.0.0.1:5173").split(",")
+    ALLOWED_ORIGINS: list = os.getenv("ALLOWED_ORIGINS", "https://amazon-sales-eight.vercel.app,http://localhost:5173,http://localhost:5001,http://127.0.0.1:5173").split(",")
 
 settings = Settings()
