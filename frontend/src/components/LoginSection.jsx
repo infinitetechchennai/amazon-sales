@@ -270,13 +270,10 @@ const LoginSection = ({ onLogin, initialView = "plans", prefillData = null }) =>
       sessionStorage.setItem("siq_plan_expiry", data.user.plan_expiry || "");
       sessionStorage.setItem("siq_plan_status", JSON.stringify(data.plan_status || {}));
       localStorage.setItem("userEmail", data.user.email);
-      setMsg("AjaiAJ login successfully!");
+      setMsg(`Welcome back, ${data.user.name}!`);
       setTimeout(() => {
-        if (data.user.plan === "none") {
-          setView("plans");
-        } else {
-          onLogin("user", data.user.plan, data.user.usageStats, data.plan_status);
-        }
+        const userPlan = data.user.plan === "none" ? "starter" : data.user.plan;
+        onLogin("user", userPlan, data.user.usageStats, data.plan_status);
       }, 800);
     } catch {
       setErr("Unable to reach the server. Make sure the backend is running.");
@@ -375,13 +372,10 @@ const LoginSection = ({ onLogin, initialView = "plans", prefillData = null }) =>
       sessionStorage.setItem("siq_plan_expiry", data.user.plan_expiry || "");
       sessionStorage.setItem("siq_plan_status", JSON.stringify(data.plan_status || {}));
       localStorage.setItem("userEmail", data.user.email);
-      setMsg("AjaiAJ login successfully!");
+      setMsg(`Welcome back, ${data.user.name}!`);
       setTimeout(() => {
-        if (data.user.plan === "none") {
-          setView("plans");
-        } else {
-          onLogin("user", data.user.plan, data.user.usageStats, data.plan_status);
-        }
+        const userPlan = data.user.plan === "none" ? "starter" : data.user.plan;
+        onLogin("user", userPlan, data.user.usageStats, data.plan_status);
       }, 800);
     } catch (e) {
       setErr("Google authentication failed. Please try again.");
