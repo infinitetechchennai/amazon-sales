@@ -37,7 +37,15 @@ class Settings:
     SALES_EMAIL: str = os.getenv("SALES_EMAIL", SMTP_USER)
     GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID", "")
     
-    # CORS Security
-    ALLOWED_ORIGINS: list = os.getenv("ALLOWED_ORIGINS", "https://amazon-sales-eight.vercel.app,https://amazon-sales-p1ght.vercel.app,http://localhost:5173,http://localhost:5001,http://127.0.0.1:5173").split(",")
+    # CORS Security – always include core production origins, merge with env overrides
+    _CORE_ORIGINS = [
+        "https://amazon-sales-eight.vercel.app",
+        "https://amazon-sales-p1ght.vercel.app",
+        "http://localhost:5173",
+        "http://localhost:5001",
+        "http://127.0.0.1:5173",
+    ]
+    _env_origins = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "").split(",") if o.strip()]
+    ALLOWED_ORIGINS: list = list(set(_CORE_ORIGINS + _env_origins))
 
 settings = Settings()
