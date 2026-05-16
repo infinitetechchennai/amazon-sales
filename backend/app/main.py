@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
 from app.api.v1.router import api_router
@@ -9,6 +10,9 @@ from app.db.base_class import Base
 # Import models to ensure they are registered with Base metadata
 from app.models.sales import User, Report, Transaction
 from sqlalchemy import text
+import traceback, logging
+
+logger = logging.getLogger("selleriq")
 
 app = FastAPI(title=settings.PROJECT_NAME)
 
@@ -21,6 +25,21 @@ app.add_middleware(
     allow_headers=["*"],
     expose_headers=["*"],
 )
+
+# ── Global Exception Handler — ensures CORS headers on 500 crashes ──────────
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    tb = traceback.format_exc()
+    logger.error(f"Unhandled error on {request.url}: {exc}\n{tb}")
+    origin = request.headers.get("origin", "*")
+    return JSONResponse(
+        status_code=500,
+        content={"detail": f"Server error: {str(exc)}"},
+        headers={
+            "Access-Control-Allow-Origin": origin,
+            "Access-Control-Allow-Credentials": "true",
+        },
+    )
 
 
 # Include API Router

@@ -24,24 +24,10 @@ async def analyze_report(
 ):
     max_bytes = 500 * 1024 * 1024
     all_parsed_rows = []
-    
-    async with AsyncSessionLocal() as db:
-        # 1. Sync User to DB if they don't exist
-        user_id = user_data.get("id", "guest_anonymous")
-        result = await db.execute(select(User).where(User.id == user_id))
-        db_user = result.scalar_one_or_none()
-        
-        if not db_user:
-            db_user = User(
-                id=user_id,
-                email=user_data.get("email", "guest@selleriq.pro"),
-                name=user_data.get("name", "Guest"),
-                plan=user_data.get("plan", "starter")
-            )
-            db.add(db_user)
-            await db.commit()
-            await db.refresh(db_user)
+    is_guest = user_data.get("id") == "guest_anonymous"
 
+    try:
+        # ── Parse uploaded files ─────────────────────────────────────────────
         for file in files:
             file_size = 0
             with tempfile.NamedTemporaryFile(delete=False, suffix=".csv") as tmp:
@@ -54,7 +40,6 @@ async def analyze_report(
                     tmp.write(chunk)
                 tmp_path = tmp.name
 
-            # 2. Parse using Pandas directly from disk
             try:
                 if file.filename.endswith(('.xlsx', '.xls')):
                     df = pd.read_excel(tmp_path)
@@ -77,7 +62,6 @@ async def analyze_report(
             df = df.fillna("")
             headers = df.columns.tolist()
             
-            # 3. Transform & Normalize
             for _, row in df.iterrows():
                 obj = {}
                 for h in headers:
@@ -105,56 +89,77 @@ async def analyze_report(
         if not all_parsed_rows:
             raise HTTPException(status_code=400, detail="No readable data found.")
 
-        # 4. Analysis
+        # ── Analysis ─────────────────────────────────────────────────────────
         analysis_results = advanced_process_data(all_parsed_rows)
         intelligence_payload = analysis_results.get("analysis", {})
         intelligence_payload["forecast"] = generate_detailed_forecast(intelligence_payload.get("dailySales", []))
         intelligence_payload["insights"] = generate_business_insights(intelligence_payload)
 
-        # 5. Persist to Database
         report_id = str(uuid.uuid4())
-        new_report = Report(
-            id=report_id,
-            user_id=db_user.id,
-            filename=", ".join([f.filename for f in files]),
-            source="amazon_mtr_merged",
-            record_count=len(all_parsed_rows),
-            analysis_results=intelligence_payload
-        )
-        db.add(new_report)
 
-        # Bulk save individual transactions safely using safe_float formatting
-        for row_data in all_parsed_rows:
-            txn = Transaction(
-                report_id=report_id,
-                order_id=str(row_data.get('Order Id', '')),
-                sku=str(row_data.get('Sku', '')),
-                revenue=safe_float(row_data.get('Invoice Amount')),
-                quantity=safe_float(row_data.get('Quantity')),
-                tax_cgst=safe_float(row_data.get('Cgst Tax')),
-                tax_sgst=safe_float(row_data.get('Sgst Tax')),
-                tax_igst=safe_float(row_data.get('Igst Tax')),
-                ship_city=row_data.get('Ship To City'),
-                ship_state=row_data.get('Ship To State'),
-                ship_zip=row_data.get('Ship To Zip'),
-                gstin=row_data.get('Gstin'),
-                fulfillment_channel=row_data.get('Fulfillment Channel'),
-                raw_payload=row_data
-            )
-            # Try parse date
+        # ── Persist to DB only for authenticated (non-guest) users ───────────
+        if not is_guest:
             try:
-                dt_str = row_data.get('Invoice Date')
-                if dt_str:
-                    for fmt_str in ["%Y-%m-%d", "%d/%m/%Y", "%Y/%m/%d", "%d-%m-%Y"]:
-                        try:
-                            txn.invoice_date = datetime.strptime(dt_str.split(' ')[0], fmt_str)
-                            break
-                        except: continue
-            except: pass
-            db.add(txn)
+                async with AsyncSessionLocal() as db:
+                    user_id = user_data.get("id")
+                    result = await db.execute(select(User).where(User.id == user_id))
+                    db_user = result.scalar_one_or_none()
+                    
+                    if not db_user:
+                        db_user = User(
+                            id=user_id,
+                            email=user_data.get("email", "guest@selleriq.pro"),
+                            name=user_data.get("name", "Guest"),
+                            plan=user_data.get("plan", "starter")
+                        )
+                        db.add(db_user)
+                        await db.commit()
+                        await db.refresh(db_user)
 
-        db_user.monthly_uploads += 1
-        await db.commit()
+                    new_report = Report(
+                        id=report_id,
+                        user_id=db_user.id,
+                        filename=", ".join([f.filename for f in files]),
+                        source="amazon_mtr_merged",
+                        record_count=len(all_parsed_rows),
+                        analysis_results=intelligence_payload
+                    )
+                    db.add(new_report)
+
+                    for row_data in all_parsed_rows:
+                        txn = Transaction(
+                            report_id=report_id,
+                            order_id=str(row_data.get('Order Id', '')),
+                            sku=str(row_data.get('Sku', '')),
+                            revenue=safe_float(row_data.get('Invoice Amount')),
+                            quantity=safe_float(row_data.get('Quantity')),
+                            tax_cgst=safe_float(row_data.get('Cgst Tax')),
+                            tax_sgst=safe_float(row_data.get('Sgst Tax')),
+                            tax_igst=safe_float(row_data.get('Igst Tax')),
+                            ship_city=row_data.get('Ship To City'),
+                            ship_state=row_data.get('Ship To State'),
+                            ship_zip=row_data.get('Ship To Zip'),
+                            gstin=row_data.get('Gstin'),
+                            fulfillment_channel=row_data.get('Fulfillment Channel'),
+                            raw_payload=row_data
+                        )
+                        try:
+                            dt_str = row_data.get('Invoice Date')
+                            if dt_str:
+                                for fmt_str in ["%Y-%m-%d", "%d/%m/%Y", "%Y/%m/%d", "%d-%m-%Y"]:
+                                    try:
+                                        txn.invoice_date = datetime.strptime(dt_str.split(' ')[0], fmt_str)
+                                        break
+                                    except: continue
+                        except: pass
+                        db.add(txn)
+
+                    db_user.monthly_uploads += 1
+                    await db.commit()
+            except Exception as db_err:
+                # Log but don't crash the entire request if DB fails
+                import logging
+                logging.getLogger("selleriq").warning(f"DB persist failed (non-fatal): {db_err}")
 
         return {
             "success": True,
@@ -163,11 +168,18 @@ async def analyze_report(
             "rawData": all_parsed_rows,
             "analysis": intelligence_payload,
             "usageStats": {
-                "used": db_user.monthly_uploads,
+                "used": 1 if is_guest else user_data.get("monthly_uploads", 0) + 1,
                 "limit": 999999,
-                "plan": db_user.plan
+                "plan": user_data.get("plan", "demo")
             }
         }
+
+    except HTTPException:
+        raise  # Re-raise HTTP exceptions as-is (400, 413, etc.)
+    except Exception as e:
+        import logging, traceback
+        logging.getLogger("selleriq").error(f"Analyze crash: {e}\n{traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail=f"Analysis engine error: {str(e)}")
 
 @router.get("/")
 async def list_reports(
