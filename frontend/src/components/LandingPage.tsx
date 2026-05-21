@@ -26,46 +26,53 @@ const featureCards = [
   {
     idx: '01',
     label: 'DATA INGESTION',
-    title: 'Automated CSV parsing.',
-    desc: 'Automated CSV upload parsing for Amazon MTR, Shopify, and custom ERP flows with 99.9% accuracy.',
+    title: 'Intelligent Data Processing',
+    desc: 'Parse and validate Amazon MTR, Shopify, and custom ERP uploads with intelligent column mapping, duplicate detection, and 99.9% accuracy.',
     img: 'https://files.peachworlds.com/website/ef1af829-2926-4bfa-adf1-bc4ed3653130/frame-1707479969.jpg'
   },
   {
     idx: '02',
-    label: 'RISK SCRUBBING',
-    title: 'Advanced AI Fraud Analysis.',
-    desc: 'Advanced AI Fraud & Risk Analysis engine to protect your revenue streams from suspicious activities.',
+    label: 'RISK MONITORING',
+    title: 'AI-Powered Risk Detection',
+    desc: 'Real-time fraud monitoring with machine learning models that score suspicious transactions, detect refund abuse patterns, and flag anomalies.',
     img: 'https://files.peachworlds.com/website/6c5b9dbc-a5cf-4d7e-ba61-86826215523b/frame-1707479970.jpg'
   },
   {
     idx: '03',
     label: 'TAX COMPLIANCE',
-    title: 'Multi-channel tax reporting.',
-    desc: 'Automated GST/Tax breakdown and reporting for multi-channel operations, ready for filing.',
+    title: 'Automated Tax Reconciliation',
+    desc: 'End-to-end GST classification, multi-channel tax breakdowns, and filing-ready compliance reports with automated audit trail generation.',
     img: 'https://files.peachworlds.com/website/c8f984e9-3162-431c-ab7e-96f2e5fa2e88/frame-1707479971.jpg'
+  },
+  {
+    idx: '04',
+    label: 'REVENUE INTELLIGENCE',
+    title: 'Predictive Revenue Forecasting',
+    desc: 'Momentum-based machine learning models that project 7-day, 30-day, and 90-day revenue trajectories with confidence intervals.',
+    img: 'https://files.peachworlds.com/website/ef1af829-2926-4bfa-adf1-bc4ed3653130/frame-1707479969.jpg'
   }
 ];
 
 const solutions = [
   {
      icon: 'https://files.peachworlds.com/website/78e021bd-adca-4fa4-8f3e-488c34dfc5de/saas-vector-1-1.png',
-     title: 'D2C Brands',
-     desc: 'Consolidate Shopify and Amazon data to understand your true customer acquisition cost and LTV.'
+     title: 'Direct-to-Consumer Brands',
+     desc: 'Unify Shopify and Amazon datasets to measure true customer acquisition costs, lifetime value, and channel-level profitability.'
   },
   {
      icon: 'https://files.peachworlds.com/website/391c0325-43ef-4481-8be3-2ff5ac827054/group.png',
      title: 'Marketplace Aggregators',
-     desc: 'Manage hundreds of brands in a single dashboard with unified reporting and automated auditing.'
+     desc: 'Manage hundreds of brands from a unified dashboard with consolidated reporting, automated audit workflows, and role-based team access.'
   },
   {
      icon: '',
-     title: 'Tax Professionals',
-     desc: 'Automate the heavy lifting of marketplace tax reconciliation and provide accurate reports to clients.'
+     title: 'Tax and Compliance Teams',
+     desc: 'Automate marketplace tax reconciliation end-to-end with intelligent classification, filing-ready outputs, and configurable compliance rules.'
   },
   {
      icon: 'https://files.peachworlds.com/website/33d7700e-d89e-4c5e-9b6a-5059ec89ac5e/frame.png',
-     title: 'Scale Effectively',
-     desc: 'Scale globally with robust API integrations, real-time data sync, and advanced risk scrubbing.'
+     title: 'Enterprise Operations',
+     desc: 'Scale globally with enterprise API integrations, real-time data synchronization, webhook support, and advanced risk monitoring infrastructure.'
   }
 ];
 
@@ -264,7 +271,7 @@ export default function LandingPage({ onGetStarted, onTryFree, onLogin, onGoogle
               className="max-w-2xl flex flex-col items-center"
             >
               <p className="text-[18px] text-white/80 mb-10 leading-relaxed font-medium">
-                The enterprise standard for marketplace data. Transform complex Amazon, Shopify, and ERP data into actionable intelligence, automated compliance, and predictive growth.
+                The enterprise standard for marketplace data. Transform complex Amazon, Shopify, and ERP data into actionable intelligence, automated compliance workflows, and predictive growth insights.
               </p>
               <div className="flex items-center gap-4 pointer-events-auto">
                 <button onClick={onGetStarted} className="flex items-center gap-2 bg-white text-black px-[28px] py-[16px] rounded-full font-semibold text-sm hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-white/20">
@@ -281,21 +288,21 @@ export default function LandingPage({ onGetStarted, onTryFree, onLogin, onGoogle
                     <img key={i} src={url} alt="avatar" className="w-9 h-9 rounded-full border-2 border-[#bca1e0]/50 object-cover shadow-sm" />
                   ))}
                 </div>
-                <span className="text-sm font-medium ml-2 text-white/90">500+ global brands scaling with SellerIQ Pro</span>
+                <span className="text-sm font-medium ml-2 text-white/90">500+ enterprise sellers trust SellerIQ Pro</span>
               </div>
 
               <div className="grid grid-cols-3 gap-6 mt-12 border-t border-white/20 pt-8 w-full pointer-events-auto">
                 <div className="flex flex-col items-center">
                   <div className="text-2xl font-display font-medium text-white mb-1">₹84.2L</div>
-                  <div className="text-xs text-white/60 tracking-wider uppercase">Global Revenue</div>
+                  <div className="text-xs text-white/60 tracking-wider uppercase">Revenue Processed</div>
                 </div>
                 <div className="flex flex-col items-center">
-                  <div className="text-2xl font-display font-medium text-white mb-1">98.4%</div>
-                  <div className="text-xs text-white/60 tracking-wider uppercase">Risk Score (AI)</div>
+                  <div className="text-2xl font-display font-medium text-white mb-1">99.9%</div>
+                  <div className="text-xs text-white/60 tracking-wider uppercase">Reconciliation Accuracy</div>
                 </div>
                 <div className="flex flex-col items-center">
-                  <div className="text-2xl font-display font-medium text-white mb-1">12</div>
-                  <div className="text-xs text-white/60 tracking-wider uppercase">Active Flows</div>
+                  <div className="text-2xl font-display font-medium text-white mb-1">24/7</div>
+                  <div className="text-xs text-white/60 tracking-wider uppercase">Active Monitoring</div>
                 </div>
               </div>
             </motion.div>
@@ -327,7 +334,7 @@ export default function LandingPage({ onGetStarted, onTryFree, onLogin, onGoogle
                </div>
                <div className="md:w-1/2 pb-4">
                  <p className="text-white/80 text-[18px] leading-relaxed max-w-[420px] drop-shadow-sm">
-                   SellerIQ Pro is built from the ground up to handle the unique complexities of Amazon Merchant Tax Reports. Our engine provides 100% reconciliation accuracy with zero manual effort.
+                   SellerIQ Pro is built from the ground up to handle the unique complexities of Amazon Merchant Tax Reports. Our engine delivers 100% reconciliation accuracy with zero manual effort.
                  </p>
                </div>
             </motion.div>
@@ -398,7 +405,7 @@ export default function LandingPage({ onGetStarted, onTryFree, onLogin, onGoogle
                       transition={{ duration: 0.8, delay: 0.2 }}
                       className="font-display text-[48px] md:text-[56px] font-medium text-white leading-[1.1] mb-8 tracking-tight drop-shadow-sm"
                    >
-                     Built for<br/>Every Scale.
+                     Built for<br/>Businesses of Every Scale.
                    </motion.h2>
                    <motion.p 
                       initial={{ opacity: 0, scale: 0.95 }}
@@ -407,7 +414,7 @@ export default function LandingPage({ onGetStarted, onTryFree, onLogin, onGoogle
                       transition={{ duration: 0.8, delay: 0.3 }}
                       className="text-white/80 text-[18px] leading-relaxed max-w-[380px] drop-shadow-sm"
                    >
-                     Tailored solutions for different business needs.
+                     Tailored solutions for diverse business needs.
                    </motion.p>
                  </div>
                  
@@ -439,7 +446,7 @@ export default function LandingPage({ onGetStarted, onTryFree, onLogin, onGoogle
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="font-display text-[48px] md:text-[56px] font-medium text-white leading-[1.1] tracking-tight drop-shadow-sm mb-6"
                      >
-                       Analytical Precision<br/>by Design.
+                       Operational Intelligence<br/>by Design
                      </motion.h2>
                      <motion.p
                         initial={{ opacity: 0, scale: 0.95 }}
@@ -448,7 +455,7 @@ export default function LandingPage({ onGetStarted, onTryFree, onLogin, onGoogle
                         transition={{ duration: 0.8, delay: 0.3 }}
                         className="text-[18px] text-white/80 leading-relaxed mb-6"
                      >
-                       Stop relying on spreadsheets. Our intelligence engine provides the only 100% accurate reconciliation standard for enterprise marketplace operations.
+                       Replace manual spreadsheets with an automated reconciliation engine. SellerIQ Pro processes every transaction, identifies discrepancies, and generates filing-ready outputs.
                      </motion.p>
                      <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
@@ -458,16 +465,16 @@ export default function LandingPage({ onGetStarted, onTryFree, onLogin, onGoogle
                         className="inline-flex items-center gap-2 px-4 py-2 mt-4 rounded border border-white/20 bg-white/5"
                      >
                         <span className="w-2 h-2 rounded-full bg-green-400" />
-                        <span className="text-sm font-semibold text-white/90">Enterprise SOC2 Certified</span>
+                        <span className="text-sm font-semibold text-white/90">Enterprise SOC 2 Type II Certified</span>
                      </motion.div>
                   </div>
                   
                   <div className="lg:w-[60%] flex flex-col gap-12 pb-16 pt-16 lg:pt-0">
                      {[
-                       { stat: '₹24.8L', text: 'Unified cross-channel rev.' },
-                       { stat: '100.0%', text: 'No transaction gaps found.' },
-                       { stat: 'Tier 3', text: 'Advanced MTR scrubbing.' },
-                       { stat: '₹4.2L', text: 'Ready for GSTR filing.' }
+                       { stat: '₹24.8L', text: 'Unified Cross-Channel Revenue Intelligence' },
+                       { stat: '99.9%', text: 'Automated Reconciliation Accuracy' },
+                       { stat: 'Tier 3', text: 'Advanced MTR Risk Scrubbing' },
+                       { stat: '₹4.2L', text: 'GSTR Filing Ready' }
                      ].map((item, i) => (
                         <AdvantageItem key={i} item={item} i={i} />
                      ))}
@@ -511,6 +518,52 @@ export default function LandingPage({ onGetStarted, onTryFree, onLogin, onGoogle
               </div>
             </section>
              
+             {/* Enterprise Platform Capabilities */}
+             <section className="px-6 max-w-7xl mx-auto w-full mb-32">
+                <motion.div
+                   initial={{ opacity: 0, y: 20 }}
+                   whileInView={{ opacity: 1, y: 0 }}
+                   viewport={{ once: true, margin: "-100px" }}
+                   transition={{ duration: 0.8 }}
+                   className="text-center mb-16"
+                >
+                   <h4 className="text-[11px] font-bold tracking-[0.2em] text-[#6b6770] uppercase mb-4">PLATFORM</h4>
+                   <h2 className="font-display text-[48px] md:text-[56px] font-medium text-black mb-6 tracking-tight">
+                     Enterprise-Grade Intelligence
+                   </h2>
+                   <p className="text-[#6b6770] text-[16px] max-w-[600px] mx-auto">Everything you need to operate, analyze, and scale your marketplace business with confidence</p>
+                </motion.div>
+
+                <motion.div
+                   initial={{ opacity: 0, y: 30 }}
+                   whileInView={{ opacity: 1, y: 0 }}
+                   viewport={{ once: true, margin: "-100px" }}
+                   transition={{ duration: 0.8, delay: 0.1 }}
+                   className="grid md:grid-cols-3 lg:grid-cols-4 gap-5"
+                >
+                   {[
+                     { icon: '📊', title: 'Real-Time Revenue Intelligence', desc: 'Live dashboards with unified revenue metrics across all channels' },
+                     { icon: '🔍', title: 'AI Anomaly Detection', desc: 'Machine learning models that detect unusual transaction patterns' },
+                     { icon: '🛡️', title: 'Smart Refund Fraud Detection', desc: 'Behavioral analysis to identify serial refund abusers and suspicious clusters' },
+                     { icon: '🧾', title: 'Automated Tax Compliance', desc: 'End-to-end GST classification with filing-ready compliance outputs' },
+                     { icon: '📈', title: 'Predictive Revenue Forecasting', desc: '7-day, 30-day, and 90-day projections with confidence scoring' },
+                     { icon: '🌍', title: 'Regional Revenue Heatmaps', desc: 'Geographic distribution analytics with logistics optimization insights' },
+                     { icon: '🔗', title: 'Enterprise API Integrations', desc: 'RESTful APIs with webhook support and custom endpoint configuration' },
+                     { icon: '📋', title: 'Executive Summary Reports', desc: 'One-click exportable reports for stakeholder presentations' },
+                     { icon: '🔔', title: 'Intelligent Alerts', desc: 'Configurable notifications for threshold breaches and anomalies' },
+                     { icon: '⚙️', title: 'Automated Reconciliation Engine', desc: 'Transaction-level matching with discrepancy identification' },
+                     { icon: '📦', title: 'Inventory Performance Monitoring', desc: 'SKU velocity tracking with restock forecasting models' },
+                     { icon: '💡', title: 'AI Business Recommendations', desc: 'Data-driven insights for revenue optimization and cost reduction' },
+                   ].map((cap, i) => (
+                     <div key={i} className="bg-[#F5F5F5] rounded-[20px] p-7 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-default group">
+                       <div className="text-2xl mb-4 group-hover:scale-110 transition-transform duration-300">{cap.icon}</div>
+                       <h4 className="text-[15px] font-semibold text-black mb-2 leading-snug">{cap.title}</h4>
+                       <p className="text-[13px] text-[#6b6770] leading-relaxed">{cap.desc}</p>
+                     </div>
+                   ))}
+                </motion.div>
+             </section>
+
              {/* 8. Pricing Section */}
              <section id="pricing" className="px-6 max-w-7xl mx-auto w-full text-center mb-32">
                 <motion.div
@@ -520,9 +573,10 @@ export default function LandingPage({ onGetStarted, onTryFree, onLogin, onGoogle
                    transition={{ duration: 0.8 }}
                 >
                    <h4 className="text-[11px] font-bold tracking-[0.2em] text-[#6b6770] uppercase mb-4">PRICING</h4>
-                   <h2 className="font-display text-[48px] md:text-[56px] font-medium text-black mb-20 tracking-tight">
-                     Simple, Scalable Pricing.
+                   <h2 className="font-display text-[48px] md:text-[56px] font-medium text-black mb-6 tracking-tight">
+                     Simple, Scalable Pricing
                    </h2>
+                   <p className="text-[#6b6770] text-[16px] mb-20">Choose the plan that fits your business stage</p>
                 </motion.div>
 
                 <div className="grid md:grid-cols-3 gap-8 items-stretch text-left">
@@ -535,14 +589,14 @@ export default function LandingPage({ onGetStarted, onTryFree, onLogin, onGoogle
                       className="bg-[#F5F5F5] rounded-[24px] p-10 flex flex-col hover:shadow-xl transition-shadow duration-500"
                    >
                       <h3 className="font-display text-[28px] font-medium text-black mb-3">Starter</h3>
-                      <p className="text-[#6b6770] text-[15px] mb-8 min-h-[44px]">Choose the plan that fits your business stage.</p>
+                      <p className="text-[#6b6770] text-[15px] mb-8 min-h-[44px]">Perfect for early-stage sellers and small businesses.</p>
                       <div className="w-full h-[1px] bg-black/10 mb-8"></div>
                       <div className="mb-10">
                          <span className="font-display text-[50px] font-medium text-black leading-none">₹3,060</span>
-                         <span className="text-[#6b6770] text-[20px]">/yr</span>
+                         <span className="text-[#6b6770] text-[20px]">/year</span>
                       </div>
                       <ul className="space-y-5 mb-12 flex-1">
-                         {['3 files per month', 'Up to 5,000 orders', 'Email Support', 'Basic Analytics'].map((feat, i) => (
+                         {['3 files per month', 'Up to 5,000 orders', 'Email support', 'Basic analytics'].map((feat, i) => (
                             <li key={i} className="flex items-center gap-4 text-black text-[15px]">
                                <span className="w-1.5 h-1.5 rounded-full bg-black shrink-0"></span>
                                {feat}
@@ -563,15 +617,15 @@ export default function LandingPage({ onGetStarted, onTryFree, onLogin, onGoogle
                       className="bg-black text-white rounded-[24px] p-10 flex flex-col transform md:-translate-y-4 shadow-2xl relative"
                    >
                       <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 rounded-t-[24px]"></div>
-                      <h3 className="font-display text-[28px] font-medium mb-3 mt-2">Pro <span className="text-sm font-normal text-white/50 ml-2">Most Popular</span></h3>
-                      <p className="text-[#A1A1A1] text-[15px] mb-8 min-h-[44px]">Ideal for growing brands needing AI automation.</p>
+                      <h3 className="font-display text-[28px] font-medium mb-3 mt-2">Pro — <span className="text-sm font-normal text-white/50 ml-2">Most Popular</span></h3>
+                      <p className="text-[#A1A1A1] text-[15px] mb-8 min-h-[44px]">Ideal for growing brands that need AI-powered automation.</p>
                       <div className="w-full h-[1px] bg-white/20 mb-8"></div>
                       <div className="mb-10">
                          <span className="font-display text-[50px] font-medium leading-none">₹15,300</span>
-                         <span className="text-[#A1A1A1] text-[20px]">/yr</span>
+                         <span className="text-[#A1A1A1] text-[20px]">/year</span>
                       </div>
                       <ul className="space-y-5 mb-12 flex-1">
-                         {['10 files per month', 'Up to 25,000 orders', '24/7 Priority Support', 'AI Fraud Detection', 'Predictive Forecasting'].map((feat, i) => (
+                         {['10 files per month', 'Up to 25,000 orders', '24/7 priority support', 'AI fraud detection', 'Predictive forecasting'].map((feat, i) => (
                             <li key={i} className="flex items-center gap-4 text-white text-[15px]">
                                <span className="w-1.5 h-1.5 rounded-full bg-white shrink-0"></span>
                                {feat}
@@ -592,14 +646,14 @@ export default function LandingPage({ onGetStarted, onTryFree, onLogin, onGoogle
                       className="bg-[#F5F5F5] rounded-[24px] p-10 flex flex-col hover:shadow-xl transition-shadow duration-500"
                    >
                       <h3 className="font-display text-[28px] font-medium text-black mb-3">Enterprise</h3>
-                      <p className="text-[#6b6770] text-[15px] mb-8 min-h-[44px]">Highest volume handling and custom integrations.</p>
+                      <p className="text-[#6b6770] text-[15px] mb-8 min-h-[44px]">Built for high-volume operations and custom enterprise integrations.</p>
                       <div className="w-full h-[1px] bg-black/10 mb-8"></div>
                       <div className="mb-10">
                          <span className="font-display text-[50px] font-medium text-black leading-none">₹50,989</span>
-                         <span className="text-[#6b6770] text-[20px]">/yr</span>
+                         <span className="text-[#6b6770] text-[20px]">/year</span>
                       </div>
                       <ul className="space-y-5 mb-12 flex-1">
-                         {['30 files per month', 'Unlimited orders', '24/7 Call Support', 'Full API Access', 'Custom Integrations'].map((feat, i) => (
+                         {['30 files per month', 'Unlimited orders', '24/7 call support', 'Full API access', 'Custom integrations'].map((feat, i) => (
                             <li key={i} className="flex items-center gap-4 text-black text-[15px]">
                                <span className="w-1.5 h-1.5 rounded-full bg-black shrink-0"></span>
                                {feat}
@@ -623,15 +677,15 @@ export default function LandingPage({ onGetStarted, onTryFree, onLogin, onGoogle
                 >
                    <h4 className="text-[11px] font-bold tracking-[0.2em] text-[#6b6770] uppercase mb-4">TESTIMONIALS</h4>
                    <h2 className="font-display text-[48px] md:text-[56px] font-medium text-black mb-20 tracking-tight">
-                     Trusted by 500+ Enterprise Sellers.
+                     Trusted by 500+ Enterprise Sellers
                    </h2>
                 </motion.div>
 
                 <div className="grid md:grid-cols-3 gap-8 text-left">
                    {[
-                      { name: 'Rahul Sharma', role: 'CEO, TechGadgets India', quote: 'SellerIQ Pro saved us over 40 hours a month in tax reconciliation. The Amazon MTR sync is flawless.', img: 'https://files.peachworlds.com/website/75c5be76-066b-440f-b9fd-d171d58b5ecc/image-1927.png' },
-                      { name: 'Sarah Jenkins', role: 'Operations Head, GlobalTrade', quote: 'The risk scrubbing feature identified ₹12L in suspicious transactions within the first week. Essential tool.', img: 'https://files.peachworlds.com/website/6f436d36-874b-4f4e-9606-2f2b293f483f/image-1928.png' },
-                      { name: 'Amit Patel', role: 'Founder, HomeDecor Pro', quote: 'Predictive forecasting has completely changed how we manage inventory. No more stockouts during peak season.', img: 'https://files.peachworlds.com/website/3e5e307a-0d19-42cf-a655-039b2f946fd4/image-1929.png' }
+                      { name: 'Rahul Sharma', role: 'CEO, TechGadgets India', quote: 'SellerIQ Pro eliminated 40 hours of monthly tax reconciliation. The automated MTR processing is remarkably accurate.', img: 'https://files.peachworlds.com/website/75c5be76-066b-440f-b9fd-d171d58b5ecc/image-1927.png' },
+                      { name: 'Sarah Jenkins', role: 'Operations Director, GlobalTrade', quote: 'The risk detection engine identified ₹12 lakh in suspicious refund patterns within the first week of deployment.', img: 'https://files.peachworlds.com/website/6f436d36-874b-4f4e-9606-2f2b293f483f/image-1928.png' },
+                      { name: 'Amit Patel', role: 'Founder, HomeDecor Pro', quote: 'Revenue forecasting transformed our inventory planning. We have not experienced a single stockout since onboarding.', img: 'https://files.peachworlds.com/website/3e5e307a-0d19-42cf-a655-039b2f946fd4/image-1929.png' }
                    ].map((t, i) => (
                       <motion.div 
                          initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -665,14 +719,17 @@ export default function LandingPage({ onGetStarted, onTryFree, onLogin, onGoogle
                 className="flex flex-col items-start max-w-3xl mb-32"
              >
                 <h2 className="font-display text-[64px] md:text-[80px] font-medium text-white leading-[1.05] tracking-tight drop-shadow-sm mb-12">
-                   Ready to Scale?
+                   Ready to Transform<br/>Your Operations?
                 </h2>
                 <p className="text-[20px] text-white/80 mb-10 leading-relaxed font-medium">
-                   Have questions about enterprise integration? Our team is here to help. Contact us 24/7 for priority enterprise support.
+                   Join 500+ enterprise sellers who have automated their marketplace intelligence. Start with a free analysis of your data.
                 </p>
                 <div className="flex items-center gap-6">
                    <button onClick={onGetStarted} className="flex items-center gap-2 bg-white text-black px-[28px] py-[16px] rounded-full font-medium text-base hover:scale-105 transition-transform duration-300">
-                      Contact Sales Team <span className="bg-black text-white rounded-full p-[2px]"><ArrowRight className="w-4 h-4" /></span>
+                      Start Free Analysis <span className="bg-black text-white rounded-full p-[2px]"><ArrowRight className="w-4 h-4" /></span>
+                   </button>
+                   <button onClick={onGetStarted} className="flex items-center gap-2 border border-white/30 text-white px-[28px] py-[16px] rounded-full font-medium text-base hover:bg-white/10 transition-all duration-300">
+                      Contact Sales
                    </button>
                 </div>
              </motion.div>
@@ -680,11 +737,11 @@ export default function LandingPage({ onGetStarted, onTryFree, onLogin, onGoogle
              <div className="flex flex-col md:flex-row justify-between items-start border-t border-white/20 pt-16 mt-16 text-white/80">
                 <div className="max-w-[320px] mb-12 md:mb-0">
                    <div className="text-[24px] font-display font-medium text-white mb-4">SellerIQ Pro</div>
-                   <p className="text-[15px] leading-relaxed mb-6">The enterprise standard for marketplace intelligence and automated tax compliance.</p>
+                   <p className="text-[15px] leading-relaxed mb-6">The enterprise standard for marketplace intelligence, automated tax compliance, and revenue forecasting.</p>
                    <a href="mailto:support@selleriq.pro" className="hover:text-white transition-colors block mb-12">support@selleriq.pro</a>
 
                    <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
-                      <div className="text-white text-sm font-medium mb-1">Stay Updated.</div>
+                      <div className="text-white text-sm font-medium mb-1">Stay Updated</div>
                       <div className="text-xs text-white/60 mb-4">Get the latest eCommerce insights delivered to your inbox.</div>
                       <div className="flex gap-2">
                          <input type="email" placeholder="Your email address" className="bg-black/50 border border-white/20 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-white/50 w-full" />

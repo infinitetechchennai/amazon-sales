@@ -402,7 +402,7 @@ function FullDataModal({ type, fullData, onClose }) {
   if (!fullData) return null;
   const isCust = type === 'customers';
   const title = isCust ? 'Risk Entity Summary' : 'Comprehensive Refund Ledger';
-  const subtitle = isCust ? 'Full list of aggregated entity risks' : 'All raw individual return transactions';
+  const subtitle = isCust ? 'Complete aggregated risk profiles for all flagged entities' : 'Full chronological record of all return transactions';
   const list = isCust ? (fullData.allRiskSummaries || fullData.topRisk || []) : (fullData.allReturnTransactions || []);
 
   // Sort transactions by date descending mostly
@@ -476,10 +476,10 @@ export default function FraudAnalysis({ fraudData }) {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
             <Shield size={22} color="var(--danger)" />
-            <h1 className="page-title" style={{ margin: 0 }}>Fraud & Refund Risk Analysis</h1>
+            <h1 className="page-title" style={{ margin: 0 }}>Fraud and Refund Risk Intelligence</h1>
           </div>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: 0 }}>
-            Top 5 highest-risk customers ranked by refund quantity and frequency
+            High-Risk Customers Ranked by Refund Frequency and Volume
           </p>
         </div>
 
@@ -501,10 +501,10 @@ export default function FraudAnalysis({ fraudData }) {
       {!loading && data.length > 0 && (
         <div className="siq-kpi-grid-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 16, marginBottom: 24 }}>
           {[
-            { id: 'customers', label: 'Critical Customers Found', value: data.length, icon: <AlertTriangle size={18} color="var(--danger)" />, color: 'var(--danger)' },
+            { id: 'customers', label: 'High-Risk Entities Identified', value: data.length, icon: <AlertTriangle size={18} color="var(--danger)" />, color: 'var(--danger)' },
             { id: 'transactions', label: 'Total Units Returned', value: totalRefundQty.toLocaleString(), icon: <Package size={18} color="var(--warning)" />, color: 'var(--warning)' },
             { id: 'transactions', label: 'Total Refund Value', value: `₹${totalRefundAmt.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`, icon: <RotateCcw size={18} color="var(--danger)" />, color: 'var(--danger)' },
-            { id: 'transactions', label: 'Refund Transactions', value: totalOrders.toLocaleString(), icon: <User size={18} color="var(--accent-secondary)" />, color: 'var(--accent-secondary)' },
+            { id: 'transactions', label: 'Refund Transactions Analyzed', value: totalOrders.toLocaleString(), icon: <User size={18} color="var(--accent-secondary)" />, color: 'var(--accent-secondary)' },
           ].map((m, i) => (
             <div key={i} className="glass" onClick={() => setActiveModal(m.id)}
                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 10px 25px rgba(0,0,0,0.1)'; }}
@@ -527,8 +527,8 @@ export default function FraudAnalysis({ fraudData }) {
         <AlertTriangle size={18} color="var(--danger)" style={{ flexShrink: 0, marginTop: 1 }} />
         <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', margin: 0, lineHeight: 1.6 }}>
           {dataset?.type === 'b2c'
-            ? "B2C transactions are anonymous. Customers are identified by their shipping location (City + Postal Code). Risk score is calculated from return volume (60%) and return frequency (40%)."
-            : "B2B buyers are identified by their registered business name. Risk score is calculated from return volume (60%) and return frequency (40%). Click any card to view their full refund ledger."}
+            ? "Business-to-consumer transactions are anonymous. Customers are identified by their shipping location (city and postal code). Risk scoring is calculated from return volume (60%) and return frequency (40%). AI confidence levels are displayed per entity."
+            : "Business-to-business buyers are identified by their registered entity name. Risk scoring is calculated from return volume (60%) and return frequency (40%). Click any card to view their complete refund ledger and transaction history."}
         </p>
       </div>
 
@@ -561,7 +561,7 @@ export default function FraudAnalysis({ fraudData }) {
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16, paddingBottom: 10 }}>
                     <AlertTriangle size={26} color="#ef4444" />
                     <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 900, color: '#b91c1c', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                      MAXIMUM QUANTITY REFUNDER DETECTED
+                      HIGHEST VOLUME REFUND ENTITY DETECTED
                     </h2>
                   </div>
                   <CriticalRiskCard item={worstOffender} rank={1} />
@@ -573,7 +573,7 @@ export default function FraudAnalysis({ fraudData }) {
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, borderBottom: '2px solid var(--border-color)', paddingBottom: 10 }}>
                       <User size={20} color="var(--text-secondary)" />
                       <h2 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-primary)' }}>
-                        General Threat List
+                        Additional Risk Entities
                       </h2>
                     </div>
                     {remaining.map((item, idx) => (

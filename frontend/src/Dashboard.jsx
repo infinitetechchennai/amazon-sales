@@ -705,7 +705,7 @@ const Dashboard = ({ rawData, filename, activePlan, source, session_id, fraudDat
             <h1 style={{ margin: 0, fontSize: 24, fontWeight: 900, color: BRAND }}>
               {isExporting ? "Comprehensive Executive Report" : (
                 activeTab === "overview" ? (
-                  source === 'shopify' ? "D2C Flow Analytics Dashboard" :
+                  source === 'shopify' ? "Direct-to-Consumer Analytics Dashboard" :
                   source === 'custom'  ? "Enterprise ERP Intelligence Hub" :
                   "Dashboard Overview"
                 ) :
@@ -890,10 +890,10 @@ const Dashboard = ({ rawData, filename, activePlan, source, session_id, fraudDat
                 }}>
                   <div>
                     <h2 style={{ margin: 0, fontSize: 22, fontWeight: 900, color: '#0f172a', display: 'flex', alignItems: 'center', gap: 8 }}>
-                      Welcome back, {userName} ✨
+                      Welcome back, {userName}
                     </h2>
                     <p style={{ margin: '4px 0 0', fontSize: 13, color: '#64748b', fontWeight: 500 }}>
-                      Here's what's happening with your Amazon sales today.
+                      Here is your real-time operational summary for Amazon sales intelligence.
                     </p>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -937,21 +937,21 @@ const Dashboard = ({ rawData, filename, activePlan, source, session_id, fraudDat
               <KpiCard label="Total Orders" value={stats.totalOrders} icon={<Package size={20} />} color={TEAL} />
               <KpiCard label="Units Sold" value={stats.unitsSold} icon={<Package size={20} />} color={BRAND} />
               
-              <KpiCard label="Avg Order Value" value={fmt(stats.avgOrderValue)} icon={<Tag size={20} />} color={GREEN} />
+              <KpiCard label="Average Order Value" value={fmt(stats.avgOrderValue)} icon={<Tag size={20} />} color={GREEN} />
               <KpiCard label="Total GST Collected" value={fmt(stats.totalTax)} icon={<Shield size={20} />} color={BRAND} />
-              <KpiCard label="Total Discount" value={fmt(stats.totalDiscount)} icon={<RotateCcw size={20} />} color={ACCENT} />
+              <KpiCard label="Promotional Discounts" value={fmt(stats.totalDiscount)} icon={<RotateCcw size={20} />} color={ACCENT} />
               <KpiCard label="Refund Amount" value={fmt(stats.refundAmount)} icon={<RotateCcw size={20} />} color={RED} />
               
-              <KpiCard label="Return Rate %" value={`${stats.returnRate}%`} icon={<AlertTriangle size={20} />} color={RED} />
-              <KpiCard label="Cancel Rate %" value={`${stats.cancelRate}%`} icon={<AlertTriangle size={20} />} color={RED} />
+              <KpiCard label="Return Rate" value={`${stats.returnRate}%`} icon={<AlertTriangle size={20} />} color={RED} />
+              <KpiCard label="Cancellation Rate" value={`${stats.cancelRate}%`} icon={<AlertTriangle size={20} />} color={RED} />
               <KpiCard label="Shipping Revenue" value={fmt(stats.shippingRevenue)} icon={<Activity size={20} />} color={GREEN} />
-              <KpiCard label="Top State" value={stats.topState} icon={<MapPin size={20} />} color={BRAND} />
+              <KpiCard label="Top Performing State" value={stats.topState} icon={<MapPin size={20} />} color={BRAND} />
             </div>
 
             <div className="siq-two-col" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24, marginBottom: 24 }}>
               {/* Daily Revenue Line Chart */}
               <div style={styles.card}>
-                <SectionHeader title={`${chartView[0].toUpperCase() + chartView.slice(1)} Revenue`} sub="Shipment revenue over time" />
+                <SectionHeader title={`${chartView[0].toUpperCase() + chartView.slice(1)} Revenue Trend`} sub="Shipment revenue performance over time" />
                 <ResponsiveContainer width="100%" height={280}>
                    <LineChart data={chartData}>
                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
@@ -965,7 +965,7 @@ const Dashboard = ({ rawData, filename, activePlan, source, session_id, fraudDat
 
               {/* Category Bar Chart */}
               <div style={styles.card}>
-                 <SectionHeader title="Category Breakdown" sub="Revenue by inferred category" />
+                 <SectionHeader title="Category Revenue Breakdown" sub="Revenue distribution by inferred product category" />
                  <ResponsiveContainer width="100%" height={280}>
                     <BarChart data={(stats.categoryBreakdown || []).slice(0, 8)} layout="vertical">
                       <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
@@ -979,7 +979,7 @@ const Dashboard = ({ rawData, filename, activePlan, source, session_id, fraudDat
 
               {/* Payment Method Pie Chart */}
               <div style={styles.card}>
-                 <SectionHeader title="Payment Methods" sub="Revenue mix by payment type" />
+                 <SectionHeader title="Payment Method Distribution" sub="Revenue composition by payment type" />
                  <ResponsiveContainer width="100%" height={280}>
                     <PieChart>
                       <Pie data={(stats.paymentMethodMix || []).slice(0, 5)} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={60} outerRadius={80} paddingAngle={5}>
@@ -995,7 +995,7 @@ const Dashboard = ({ rawData, filename, activePlan, source, session_id, fraudDat
 
               {/* State Revenue Bar Chart */}
               <div style={styles.card}>
-                 <SectionHeader title="Top 10 States" sub="Highest revenue driving regions" />
+                 <SectionHeader title="Top 10 Revenue-Driving States" sub="Highest performing geographic regions" />
                  <ResponsiveContainer width="100%" height={280}>
                     <BarChart data={(stats.stateList || []).slice(0, 10)}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
@@ -1143,11 +1143,11 @@ const Dashboard = ({ rawData, filename, activePlan, source, session_id, fraudDat
                      <div style={{ background: '#f8fafc', padding: 24, borderRadius: 20, border: '1px solid #e2e8f0' }}>
                         <div style={{ fontSize: 11, fontWeight: 800, color: '#64748b', textTransform: 'uppercase', marginBottom: 8 }}>Total Tax Collected</div>
                         <div style={{ fontSize: 32, fontWeight: 900, color: '#0f172a' }}>{fmt(stats.tax?.total || 0)}</div>
-                        <div style={{ fontSize: 13, color: '#64748b', marginTop: 8 }}>Avg. Effective Rate: <span style={{ fontWeight: 800, color: BRAND }}>18.2%</span></div>
+                        <div style={{ fontSize: 13, color: '#64748b', marginTop: 8 }}>Average Effective Rate: <span style={{ fontWeight: 800, color: BRAND }}>18.2%</span></div>
                      </div>
                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
                         <div style={{ background: 'white', padding: 20, borderRadius: 16, border: '1px solid #e2e8f0' }}>
-                           <div style={{ fontSize: 10, fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', marginBottom: 4 }}>B2B Segment</div>
+                           <div style={{ fontSize: 10, fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', marginBottom: 4 }}>Business-to-Business Segment</div>
                            <div style={{ fontSize: 24, fontWeight: 900 }}>
                              {stats.b2bPercentage != null && String(stats.b2bPercentage).trim() !== ""
                                ? `${stats.b2bPercentage}%`
@@ -1160,7 +1160,7 @@ const Dashboard = ({ rawData, filename, activePlan, source, session_id, fraudDat
                            </div>
                         </div>
                         <div style={{ background: 'white', padding: 20, borderRadius: 16, border: '1px solid #e2e8f0' }}>
-                           <div style={{ fontSize: 10, fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', marginBottom: 4 }}>Compliance</div>
+                           <div style={{ fontSize: 10, fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', marginBottom: 4 }}>Compliance Score</div>
                            <div style={{ fontSize: 24, fontWeight: 900, color: GREEN }}>98.4</div>
                         </div>
                      </div>
@@ -1170,9 +1170,9 @@ const Dashboard = ({ rawData, filename, activePlan, source, session_id, fraudDat
 
               <div style={{ gridColumn: '1 / -1', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, marginTop: 12 }}>
                  {[
-                    { l: 'Tax Accuracy Rate', v: '99.9%', sub: 'Algorithm precision across tax brackets', trend: '+0.2%' },
-                    { l: 'Reconciliation Status', v: 'Synched', sub: 'Last check performed 2 mins ago', trend: '+0.2%' },
-                    { l: 'Compliance Index', v: 'Grade A', sub: 'Meets latest GST mandate standards', trend: '+0.2%' },
+                    { l: 'Tax Accuracy Rate', v: '99.9%', sub: 'Algorithmic precision across all tax brackets', trend: '+0.2%' },
+                    { l: 'Reconciliation Status', v: 'Synced', sub: 'Last automated check performed 2 minutes ago', trend: '+0.2%' },
+                    { l: 'Compliance Index', v: 'Grade A', sub: 'Meets current GST mandate requirements', trend: '+0.2%' },
                  ].map((c, i) => (
                     <div key={i} style={{ ...styles.card, borderTop: `4px solid ${i === 0 ? PURPLE : i === 1 ? GREEN : TEAL}` }}>
                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
@@ -1193,7 +1193,7 @@ const Dashboard = ({ rawData, filename, activePlan, source, session_id, fraudDat
         {(activeTab === "sku" || isExporting) && stats && (
            <div style={{ ...styles.card, marginTop: isExporting ? 60 : 0 }}>
              {isExporting && <h2 style={{ fontSize: 28, borderBottom: "4px solid #2563eb", paddingBottom: 10, marginBottom: 30, color: "#0f172a" }}>5. Product Performance Catalog</h2>}
-            <SectionHeader title="📋 Product Performance Inventory" sub="Detailed SKU breakdown" />
+            <SectionHeader title="📋 Product Performance Inventory" sub="Detailed SKU-level performance breakdown" />
             <div style={{ overflowX: 'auto' }}>
               <table style={styles.table}>
               <thead>
@@ -1419,11 +1419,11 @@ const Dashboard = ({ rawData, filename, activePlan, source, session_id, fraudDat
                                   </div>
                                   <div style={{ display: 'flex', gap: 20, flexShrink: 0 }}>
                                     <div style={{ textAlign: 'center' }}>
-                                      <div style={{ fontSize: 10, color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>7-Day Proj</div>
+                                      <div style={{ fontSize: 10, color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>7-Day Projection</div>
                                       <div style={{ fontSize: 13, fontWeight: 900, color: BRAND }}>{proj7} units</div>
                                     </div>
                                     <div style={{ textAlign: 'center' }}>
-                                      <div style={{ fontSize: 10, color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>30-Day Proj</div>
+                                      <div style={{ fontSize: 10, color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>30-Day Projection</div>
                                       <div style={{ fontSize: 13, fontWeight: 900, color: PURPLE }}>{proj30} units</div>
                                     </div>
                                     {skuRevenue > 0 && (
@@ -1457,7 +1457,7 @@ const Dashboard = ({ rawData, filename, activePlan, source, session_id, fraudDat
                     { label: "7-Day Forecast", value: fmt(stats.forecast7), icon: "📅", color: BRAND, sub: `~${fmt((stats.forecast7 || 0) / 7)}/day` },
                     { label: "30-Day Forecast", value: fmt(stats.forecast30), icon: "📆", color: PURPLE, sub: `~${fmt((stats.forecast30 || 0) / 30)}/day` },
                     { label: "90-Day Forecast", value: fmt(stats.forecast90), icon: "🗓️", color: GREEN, sub: "3-month outlook" },
-                    { label: "Projected Annual", value: fmt((stats.forecast90 || 0) * 4), icon: "🚀", color: TEAL, sub: "Run-rate estimate" },
+                    { label: "Projected Annual Revenue", value: fmt((stats.forecast90 || 0) * 4), icon: "🚀", color: TEAL, sub: "Run-rate estimate" },
                   ].map((m, i) => (
                     <div key={i} style={{ ...styles.card, borderTop: `3px solid ${m.color}` }}>
                       <div style={{ fontSize: 26, marginBottom: 6 }}>{m.icon}</div>
@@ -1469,7 +1469,7 @@ const Dashboard = ({ rawData, filename, activePlan, source, session_id, fraudDat
                 </div>
 
                 <div style={{ ...styles.card, marginBottom: 24 }}>
-                  <SectionHeader title="📈 Historical Trend & Forward Projection" sub="Weekly actual revenue with momentum-modeled projection" />
+                  <SectionHeader title="📈 Historical Trends & Forward Projections" sub="Weekly actual revenue with momentum-based forecasting" />
                   <ResponsiveContainer width="100%" height={300}>
                     <LineChart data={[
                       ...(stats.weeklySales || []).map((w, i) => ({ ...w, name: w.week || `W${i+1}` })),
@@ -1524,7 +1524,7 @@ const Dashboard = ({ rawData, filename, activePlan, source, session_id, fraudDat
                                 <div style={{ height: "100%", width: `${pct}%`, background: cols[i], borderRadius: 4, transition: "width 0.6s ease" }} />
                               </div>
                             </div>
-                            <div style={{ fontSize: 12, fontWeight: 800, color: "#64748b", flexShrink: 0 }}>{(s.dailyVelocity || 0).toFixed(1)}/d</div>
+                            <div style={{ fontSize: 12, fontWeight: 800, color: "#64748b", flexShrink: 0 }}>{(s.dailyVelocity || 0).toFixed(1)}/day</div>
                           </div>
                         );
                       })}
@@ -1537,7 +1537,7 @@ const Dashboard = ({ rawData, filename, activePlan, source, session_id, fraudDat
                     <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 8 }}>
                       {[
                         { icon: "📦", color: GREEN, title: "Restock Alert", body: `Top SKU "${stats.skuVelocity?.[0]?.sku || "—"}" moving at ${(stats.skuVelocity?.[0]?.dailyVelocity || 0).toFixed(1)}/day. Plan 30-day safety stock now.` },
-                        { icon: "💰", color: BRAND, title: "Revenue Momentum", body: `30D projection ${fmt(stats.forecast30)} signals ${(stats.forecast30 || 0) > (stats.totalRevenue || 0) ? "📈 growing" : "📉 softening"} demand.` },
+                        { icon: "💰", color: BRAND, title: "Revenue Momentum", body: `30-day projection ${fmt(stats.forecast30)} signals ${(stats.forecast30 || 0) > (stats.totalRevenue || 0) ? "📈 growing" : "📉 softening"} demand.` },
                         { icon: "🌍", color: PURPLE, title: "Regional Opportunity", body: `${stats.stateList?.[0]?.state || "Top state"} leads revenue. Targeted regional promos can amplify momentum.` },
                         { icon: "⚠️", color: RED, title: "Return Rate Watch", body: `Rate at ${parseFloat(stats.returnRate || 0).toFixed(1)}%. ${parseFloat(stats.returnRate) > 10 ? "⛔ Above threshold — investigate top-returning SKUs." : "✅ Healthy. Continue monitoring."}` },
                       ].map((ins, i) => (
@@ -1570,7 +1570,7 @@ const Dashboard = ({ rawData, filename, activePlan, source, session_id, fraudDat
             <h2 style={{ fontSize: 42, fontWeight: 900, marginBottom: 20, color: "#0f172a", letterSpacing: '-1px' }}>Empowering Enterprise Intelligence</h2>
             <p style={{ fontSize: 16, lineHeight: 1.8, color: "#475569", maxWidth: 700, margin: '0 auto' }}>
               SellerIQ Pro is a premier data analytics engine developed exclusively to bridge the gap between massive eCommerce datasets and actionable enterprise decision-making. 
-              Our mission is to arm brands with the fastest, most secure, and most intelligent toolkit to dissect their marketplace and B2B pipelines.
+              Our mission is to equip brands with the fastest, most secure, and most intelligent toolkit for analyzing their marketplace and business-to-business pipelines.
             </p>
           </div>
 
@@ -1580,7 +1580,7 @@ const Dashboard = ({ rawData, filename, activePlan, source, session_id, fraudDat
                 <TrendingUp size={32} />
               </div>
               <h3 style={{ fontSize: 20, fontWeight: 800, marginBottom: 12, color: '#0f172a' }}>Our Vision</h3>
-              <p style={{ fontSize: 14, color: "#64748b", lineHeight: 1.6 }}>To become the undisputed global standard in AI-driven unified commerce intelligence by replacing manual spreadsheets with automated truth engines. We process data at planetary scale.</p>
+              <p style={{ fontSize: 14, color: "#64748b", lineHeight: 1.6 }}>To become the undisputed global standard in AI-driven unified commerce intelligence by replacing manual spreadsheets with automated, intelligence-driven systems. We process data at planetary scale.</p>
             </div>
             
             <div className="glass" style={{ padding: '40px', borderRadius: 24, border: '1px solid #e2e8f0', background: 'white' }}>
@@ -1588,14 +1588,14 @@ const Dashboard = ({ rawData, filename, activePlan, source, session_id, fraudDat
                 <Shield size={32} />
               </div>
               <h3 style={{ fontSize: 20, fontWeight: 800, marginBottom: 12, color: '#0f172a' }}>Security First</h3>
-              <p style={{ fontSize: 14, color: "#64748b", lineHeight: 1.6 }}>Our SaaS algorithms process all analytical datasets statelessly. We enforce heavy encryption pipelines and SOC2 protocols to guarantee your private financial vectors remain completely secure.</p>
+              <p style={{ fontSize: 14, color: "#64748b", lineHeight: 1.6 }}>Our SaaS platform processes analytical datasets seamlessly and at scale. We enforce robust encryption pipelines and SOC 2 compliance protocols to ensure that your sensitive financial data remains completely secure.</p>
             </div>
           </div>
 
           <div className="siq-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
             {[
               { stat: "99.9%", label: "MTR Reconciliation Accuracy" },
-              { stat: "0ms", label: "Stateless Data Retention" },
+              { stat: "0ms", label: "High-Speed Stateless Processing" },
               { stat: "500+", label: "Global Enterprise Clients" }
             ].map((s, i) => (
                <div key={i} className="glass" style={{ padding: '30px', borderRadius: 20, textAlign: 'center', background: '#f8fafc', border: '1px solid #e2e8f0' }}>
@@ -1603,6 +1603,86 @@ const Dashboard = ({ rawData, filename, activePlan, source, session_id, fraudDat
                  <div style={{ fontSize: 12, fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{s.label}</div>
                </div>
             ))}
+          </div>
+
+          {/* Core Values */}
+          <div className="glass" style={{ padding: '50px', borderRadius: 32, textAlign: 'center', marginTop: 32, marginBottom: 32, borderTop: `4px solid ${PURPLE}`, background: 'white' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 16px', background: `${PURPLE}15`, color: PURPLE, borderRadius: 100, fontSize: 12, fontWeight: 800, textTransform: 'uppercase', marginBottom: 24 }}>
+              <Activity size={16} /> Core Values
+            </div>
+            <h2 style={{ fontSize: 36, fontWeight: 900, marginBottom: 16, color: "#0f172a", letterSpacing: '-0.5px' }}>What Drives Us</h2>
+            <p style={{ fontSize: 15, color: '#64748b', maxWidth: 600, margin: '0 auto 40px', lineHeight: 1.7 }}>
+              Every feature we build, every algorithm we deploy, and every insight we surface is guided by these foundational principles.
+            </p>
+            <div className="siq-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, textAlign: 'left' }}>
+              {[
+                { icon: "🎯", title: "Accuracy Above All", desc: "We engineer our reconciliation engines to deliver 99.9% precision across every transaction, every time. No approximations, no rounding errors." },
+                { icon: "⚡", title: "Speed at Scale", desc: "Our processing pipeline analyzes thousands of transactions per second, delivering real-time insights regardless of dataset complexity." },
+                { icon: "🔒", title: "Privacy by Design", desc: "All data processing follows zero-retention architecture. Your financial data is analyzed in-memory and never persisted beyond the active session." },
+                { icon: "🤖", title: "Intelligence First", desc: "We embed machine learning into every layer of the platform — from fraud detection to demand forecasting to automated compliance workflows." }
+              ].map((v, i) => (
+                <div key={i} style={{ padding: '28px 32px', background: '#f8fafc', borderRadius: 20, border: '1px solid #e2e8f0', transition: 'all 0.3s' }}>
+                  <div style={{ fontSize: 28, marginBottom: 16 }}>{v.icon}</div>
+                  <h4 style={{ fontSize: 16, fontWeight: 800, color: '#0f172a', marginBottom: 8 }}>{v.title}</h4>
+                  <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.65, margin: 0 }}>{v.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Platform Capabilities */}
+          <div className="glass" style={{ padding: '50px', borderRadius: 32, textAlign: 'center', marginBottom: 32, borderTop: `4px solid ${TEAL}`, background: 'white' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 16px', background: `${TEAL}15`, color: TEAL, borderRadius: 100, fontSize: 12, fontWeight: 800, textTransform: 'uppercase', marginBottom: 24 }}>
+              <Package size={16} /> Platform Capabilities
+            </div>
+            <h2 style={{ fontSize: 36, fontWeight: 900, marginBottom: 16, color: "#0f172a", letterSpacing: '-0.5px' }}>Built for Enterprise Commerce</h2>
+            <p style={{ fontSize: 15, color: '#64748b', maxWidth: 640, margin: '0 auto 40px', lineHeight: 1.7 }}>
+              SellerIQ Pro is engineered to handle the full spectrum of marketplace intelligence — from raw data ingestion to predictive growth modeling.
+            </p>
+            <div className="siq-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20, textAlign: 'left' }}>
+              {[
+                { icon: "📥", title: "Automated Data Ingestion", desc: "Seamlessly parse Amazon MTR, Shopify exports, and custom ERP files with intelligent column mapping and validation." },
+                { icon: "🧾", title: "Multi-Channel Tax Compliance", desc: "Automated GST classification, IGST and SGST breakdowns, and filing-ready tax summaries across all sales channels." },
+                { icon: "🛡️", title: "AI-Powered Risk Detection", desc: "Our machine learning engine identifies high-risk refund patterns, suspicious return clusters, and potential fraud indicators in real time." },
+                { icon: "📊", title: "Predictive Revenue Forecasting", desc: "Data-driven 7-day, 30-day, and 90-day revenue projections using momentum-based algorithmic modeling." },
+                { icon: "🌍", title: "Regional Distribution Analytics", desc: "Visualize logistics network coverage, identify underserved markets, and optimize fulfillment strategies across geographic regions." },
+                { icon: "🔗", title: "Enterprise API Integrations", desc: "Full RESTful API access with webhook support, real-time data synchronization, and custom integration endpoints for third-party platforms." }
+              ].map((c, i) => (
+                <div key={i} style={{ padding: '28px', background: '#f8fafc', borderRadius: 20, border: '1px solid #e2e8f0' }}>
+                  <div style={{ fontSize: 26, marginBottom: 14 }}>{c.icon}</div>
+                  <h4 style={{ fontSize: 15, fontWeight: 800, color: '#0f172a', marginBottom: 8 }}>{c.title}</h4>
+                  <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.6, margin: 0 }}>{c.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Compliance & Trust */}
+          <div className="glass" style={{ padding: '40px 50px', borderRadius: 32, background: 'linear-gradient(135deg, #0f172a, #1e293b)', marginBottom: 32 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 32 }}>
+              <div style={{ maxWidth: 420 }}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 14px', background: 'rgba(255,255,255,0.08)', color: '#94a3b8', borderRadius: 100, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', marginBottom: 20, border: '1px solid rgba(255,255,255,0.1)' }}>
+                  <Shield size={14} /> Compliance & Trust
+                </div>
+                <h3 style={{ fontSize: 28, fontWeight: 900, color: 'white', marginBottom: 12, letterSpacing: '-0.5px' }}>Enterprise-Grade Security</h3>
+                <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, margin: 0 }}>
+                  SellerIQ Pro adheres to the highest standards of data security and regulatory compliance. Every transaction processed through our platform is protected by industry-leading encryption and access control protocols.
+                </p>
+              </div>
+              <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+                {[
+                  { badge: "SOC 2", sub: "Type II Certified" },
+                  { badge: "256-bit", sub: "AES Encryption" },
+                  { badge: "GDPR", sub: "Fully Compliant" },
+                  { badge: "Zero", sub: "Data Retention" }
+                ].map((b, i) => (
+                  <div key={i} style={{ width: 110, padding: '20px 12px', background: 'rgba(255,255,255,0.05)', borderRadius: 16, textAlign: 'center', border: '1px solid rgba(255,255,255,0.08)' }}>
+                    <div style={{ fontSize: 20, fontWeight: 900, color: 'white', marginBottom: 4 }}>{b.badge}</div>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{b.sub}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
         </div>

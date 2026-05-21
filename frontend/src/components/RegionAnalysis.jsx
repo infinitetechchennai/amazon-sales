@@ -71,9 +71,9 @@ const RegionAnalysis = ({ stats, styles = {} }) => {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
           <div>
              <div style={{ display: 'inline-block', padding: '4px 12px', background: `${BRAND}15`, color: BRAND, borderRadius: 20, fontSize: 10, fontWeight: 900, marginBottom: 8, letterSpacing: 1 }}>FULL COVERAGE</div>
-             <h3 style={{ fontSize: 24, fontWeight: 900, margin: 0 }}>{showMap ? "Logistics Node Network" : "Geographic Distribution"}</h3>
+             <h3 style={{ fontSize: 24, fontWeight: 900, margin: 0 }}>{showMap ? "Logistics Distribution Network" : "Geographic Revenue Distribution"}</h3>
              <p style={{ fontSize: 14, color: '#64748b', margin: '4px 0 0' }}>
-               {showMap ? "Live visualization of regional distribution hubs across India" : "Orders by ship-to state across India"}
+               {showMap ? "Real-time visualization of regional distribution coverage across India" : "Order volume and revenue by ship-to state across India"}
              </p>
           </div>
           {!showMap && (
@@ -190,13 +190,13 @@ const RegionAnalysis = ({ stats, styles = {} }) => {
            </div>
            <h3 style={{ fontSize: 20, fontWeight: 900, marginBottom: 12 }}>Regional Intelligence</h3>
            <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.6, marginBottom: 24 }}>
-              Your logistics engine is currently concentrated in <b>{stats.stateList?.[0]?.state}</b>. 
-              {stats.stateList?.[1] ? ` Expanding secondary nodes in ${stats.stateList[1].state} could reduce transit times by up to 18%.` : ""}
+              Your logistics network is currently concentrated in <b>{stats.stateList?.[0]?.state}</b>. 
+               {stats.stateList?.[1] ? ` Expanding secondary distribution nodes into ${stats.stateList[1].state} could reduce average transit times by up to 18%.` : ""}
            </p>
            <button 
              onClick={() => setShowMap(!showMap)} 
              style={{ alignSelf: 'flex-start', padding: '10px 20px', borderRadius: 10, border: 'none', background: showMap ? '#0f172a' : BRAND, color: 'white', fontWeight: 700, cursor: 'pointer', transition: 'all 0.3s' }}>
-             {showMap ? "Return to Regional Chart" : "View Logistics Map"}
+              {showMap ? "Return to Distribution Chart" : "View Network Map"}
            </button>
         </div>
       </div>
