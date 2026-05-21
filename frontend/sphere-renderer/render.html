@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Glass Sphere Renderer</title>
+  <style>
+    *{margin:0;padding:0}
+    body{overflow:hidden;background:#1a0a2e}
+    canvas{display:block}
+    #ui{position:fixed;top:16px;left:16px;z-index:100;color:#fff;font:13px/1.6 monospace;
+      background:rgba(0,0,0,.7);padding:12px 18px;border-radius:8px}
+    #btn{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);z-index:200;
+      padding:14px 32px;font:600 15px sans-serif;cursor:pointer;border:none;border-radius:12px;
+      background:linear-gradient(135deg,#9b59b6,#6c3483);color:#fff}
+    #bar{position:fixed;bottom:0;left:0;height:3px;background:linear-gradient(90deg,#9b59b6,#e8d5f5);
+      width:0%;z-index:300;transition:width .1s}
+  </style>
+</head>
+<body>
+<div id="ui">Loading Three.js...</div>
+<button id="btn" onclick="capture()">▶ Start Capture (8s@30fps)</button>
+<div id="bar"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.162.0/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.162.0/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.162.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.162.0/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.162.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.162.0/examples/js/shaders/CopyShader.js"></script>
+<script>
+const W=1920,H=1080,FPS=30,DUR=8,TOTAL=FPS*DUR;
+
+/* renderer */
+const R=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});
+R.setSize(W,H);R.setPixelRatio(1);
+R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.3;
+R.outputColorSpace=THREE.SRGBColorSpace;
+document.body.appendChild(R.domElement);
+
+/* scene + camera */
+const S=new THREE.Scene(), cam=new THREE.PerspectiveCamera(32,W/H,.1,100);
+cam.position.set(0,0,5.5);
+
+/* background */
+const bgC=document.createElement('canvas');bgC.width=bgC.height=2048;
+const bgX=bgC.getContext('2d');
+function drawBG(a){
+  const g=bgX.createRadialGradient(1024+Math.sin(a*.5)*15,850,150,1024,1024,1300);
+  g.addColorStop(0,'#DCC8F0');g.addColorStop(.15,'#C9ACE0');
+  g.addColorStop(.35,'#B48DD4');g.addColorStop(.55,'#9670B8');
+  g.addColorStop(.75,'#7A52A0');g.addColorStop(1,'#4A2D6E');
+  bgX.fillStyle=g;bgX.fillRect(0,0,2048,2048);
+  [[600,500,300,.12],[1400,700,250,.08],[1024,1024,500,.06]].forEach(([x,y,r,a])=>{
+    const sg=bgX.createRadialGradient(x,y,0,x,y,r);
+    sg.addColorStop(0,`rgba(230,200,255,${a})`);sg.addColorStop(1,'rgba(0,0,0,0)');
+    bgX.fillStyle=sg;bgX.fillRect(0,0,2048,2048);
+  });
+}
+drawBG(0);
+const bgT=new THREE.CanvasTexture(bgC);S.background=bgT;
+
+/* env map */
+const eC=document.createElement('canvas');eC.width=eC.height=512;
+const eX=eC.getContext('2d');
+const eg=eX.createRadialGradient(256,200,30,256,256,350);
+eg.addColorStop(0,'#F5EAFF');eg.addColorStop(.3,'#D4B8EC');
+eg.addColorStop(.6,'#A87CCC');eg.addColorStop(1,'#5B3880');
+eX.fillStyle=eg;eX.fillRect(0,0,512,512);
+for(let i=0;i<20;i++){
+  const x=Math.random()*512,y=Math.random()*512,r=8+Math.random()*25;
+  const sg=eX.createRadialGradient(x,y,0,x,y,r);
+  sg.addColorStop(0,`rgba(255,255,255,${.1+Math.random()*.25})`);
+  sg.addColorStop(1,'rgba(255,255,255,0)');
+  eX.fillStyle=sg;eX.beginPath();eX.arc(x,y,r,0,Math.PI*2);eX.fill();
+}
+const envMap=new THREE.CanvasTexture(eC);
+envMap.mapping=THREE.EquirectangularReflectionMapping;
+S.environment=envMap;
+
+/* glass sphere */
+const sph=new THREE.Mesh(
+  new THREE.SphereGeometry(1,256,256),
+  new THREE.MeshPhysicalMaterial({
+    color:0xe0d0f5,metalness:0,roughness:.02,transmission:.95,thickness:2,
+    ior:1.5,envMap,envMapIntensity:2.2,clearcoat:1,clearcoatRoughness:.03,
+    reflectivity:1,transparent:true,opacity:.9,
+    attenuationColor:new THREE.Color('#c9a0e8'),attenuationDistance:1.5,
+    specularIntensity:1,specularColor:new THREE.Color('#fff'),
+    sheen:.3,sheenColor:new THREE.Color('#d4b8f0'),sheenRoughness:.2
+  })
+);
+S.add(sph);
+
+/* outer shell */
+const shell=new THREE.Mesh(
+  new THREE.SphereGeometry(1.02,128,128),
+  new THREE.MeshPhysicalMaterial({
+    color:0xf0e8ff,metalness:.1,roughness:.1,transmission:.7,thickness:.1,
+    ior:1.3,envMap,envMapIntensity:1,transparent:true,opacity:.15,
+    clearcoat:.5,clearcoatRoughness:.1
+  })
+);
+sph.add(shell);
+
+/* inner glows */
+const ig1m=new THREE.MeshBasicMaterial({color:0xd9b8ff,transparent:true,opacity:.12});
+sph.add(new THREE.Mesh(new THREE.SphereGeometry(.75,64,64),ig1m));
+const ig2m=new THREE.MeshBasicMaterial({color:0xece0ff,transparent:true,opacity:.2});
+sph.add(new THREE.Mesh(new THREE.SphereGeometry(.45,48,48),ig2m));
+const corem=new THREE.MeshBasicMaterial({color:0xf8f0ff,transparent:true,opacity:.4});
+sph.add(new THREE.Mesh(new THREE.SphereGeometry(.12,32,32),corem));
+
+/* caustic ring */
+const crm=new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.08});
+const cr=new THREE.Mesh(new THREE.TorusGeometry(1.04,.006,16,128),crm);
+cr.rotation.x=1.2;sph.add(cr);
+
+/* bokeh particles */
+const BN=80,bd=[],bp=new Float32Array(BN*3),bs=new Float32Array(BN),ba=new Float32Array(BN);
+for(let i=0;i<BN;i++){
+  const d={x:(Math.random()-.5)*14,y:(Math.random()-.5)*8,z:-1.5-Math.random()*8,
+    ph:Math.random()*Math.PI*2,sp:.3+Math.random()*.5,sz:12+Math.random()*45,al:.08+Math.random()*.35};
+  bd.push(d);bp[i*3]=d.x;bp[i*3+1]=d.y;bp[i*3+2]=d.z;bs[i]=d.sz;ba[i]=d.al;
+}
+const bg=new THREE.BufferGeometry();
+bg.setAttribute('position',new THREE.BufferAttribute(bp,3));
+bg.setAttribute('aSize',new THREE.BufferAttribute(bs,1));
+bg.setAttribute('aAlpha',new THREE.BufferAttribute(ba,1));
+const bm=new THREE.ShaderMaterial({
+  vertexShader:`attribute float aSize;attribute float aAlpha;varying float vA;
+    void main(){vA=aAlpha;vec4 mv=modelViewMatrix*vec4(position,1.);
+    gl_PointSize=aSize*(350./-mv.z);gl_Position=projectionMatrix*mv;}`,
+  fragmentShader:`varying float vA;void main(){float d=length(gl_PointCoord-.5);
+    if(d>.5)discard;float a=exp(-d*d*12.)*vA;gl_FragColor=vec4(mix(vec3(.85,.72,1.),vec3(1.),.4),a);}`,
+  transparent:true,depthWrite:false,blending:THREE.AdditiveBlending
+});
+S.add(new THREE.Points(bg,bm));
+
+/* dust */
+const DN=40,dd=[],dp=new Float32Array(DN*3),dss=new Float32Array(DN),das=new Float32Array(DN);
+for(let i=0;i<DN;i++){
+  const d={x:(Math.random()-.5)*6,y:(Math.random()-.5)*4,z:-.5+Math.random()*2,
+    ph:Math.random()*Math.PI*2,sp:.5+Math.random()};
+  dd.push(d);dp[i*3]=d.x;dp[i*3+1]=d.y;dp[i*3+2]=d.z;dss[i]=2+Math.random()*5;das[i]=.15+Math.random()*.4;
+}
+const dg=new THREE.BufferGeometry();
+dg.setAttribute('position',new THREE.BufferAttribute(dp,3));
+dg.setAttribute('aSize',new THREE.BufferAttribute(dss,1));
+dg.setAttribute('aAlpha',new THREE.BufferAttribute(das,1));
+S.add(new THREE.Points(dg,new THREE.ShaderMaterial({
+  vertexShader:`attribute float aSize;attribute float aAlpha;varying float vA;
+    void main(){vA=aAlpha;vec4 mv=modelViewMatrix*vec4(position,1.);
+    gl_PointSize=aSize*(200./-mv.z);gl_Position=projectionMatrix*mv;}`,
+  fragmentShader:`varying float vA;void main(){float d=length(gl_PointCoord-.5);
+    if(d>.5)discard;gl_FragColor=vec4(1.,.98,1.,exp(-d*d*20.)*vA);}`,
+  transparent:true,depthWrite:false,blending:THREE.AdditiveBlending
+})));
+
+/* lights */
+S.add(new THREE.AmbientLight(0xe0d0f5,.5));
+const kl=new THREE.DirectionalLight(0xffffff,1.5);kl.position.set(4,5,6);S.add(kl);
+const fl=new THREE.DirectionalLight(0xd4b8ec,.6);fl.position.set(-4,-2,4);S.add(fl);
+const rl=new THREE.DirectionalLight(0xf0e8ff,1);rl.position.set(0,3,-4);S.add(rl);
+S.add(Object.assign(new THREE.DirectionalLight(0xc9a0e8,.3),{position:new THREE.Vector3(0,-4,2)}));
+const pl1=new THREE.PointLight(0xd4b8f0,.8,12);pl1.position.set(2.5,1.5,3);S.add(pl1);
+const pl2=new THREE.PointLight(0xa87ccc,.5,10);pl2.position.set(-2,-1,2);S.add(pl2);
+const sl=new THREE.SpotLight(0xf0e0ff,.6,15,Math.PI/6,.8);
+sl.position.set(1,4,4);sl.target=sph;S.add(sl);
+
+/* post processing */
+const composer=new THREE.EffectComposer(R);
+composer.addPass(new THREE.RenderPass(S,cam));
+composer.addPass(new THREE.UnrealBloomPass(new THREE.Vector2(W,H),.45,1,.3));
+
+/* animate one frame */
+function frame(f){
+  const t=f/TOTAL,a=t*Math.PI*2;
+  sph.position.y=Math.sin(a)*.1+Math.sin(a*2)*.02;
+  sph.position.x=Math.sin(a*.5)*.035;
+  sph.rotation.y=a*.25;sph.rotation.x=Math.sin(a)*.06;sph.rotation.z=Math.cos(a*.6)*.03;
+  const b=1+Math.sin(a)*.02+Math.sin(a*2)*.005;sph.scale.setScalar(b);
+  ig1m.opacity=.1+Math.sin(a*2)*.05;ig2m.opacity=.18+Math.sin(a*1.5+.8)*.06;
+  corem.opacity=.35+Math.sin(a*1.3+.5)*.12;crm.opacity=.06+Math.sin(a*3)*.03;cr.rotation.z=a*.1;
+  cam.position.x=Math.sin(a*.5)*.12;cam.position.y=Math.cos(a*.3)*.06+.05;
+  cam.position.z=5.5+Math.sin(a*.4)*.08;cam.lookAt(sph.position.x*.5,sph.position.y*.5,0);
+  const bpA=bg.attributes.position.array;
+  for(let i=0;i<BN;i++){const d=bd[i];
+    bpA[i*3]=d.x+Math.sin(a*d.sp+d.ph)*.25;bpA[i*3+1]=d.y+Math.cos(a*d.sp*.7+d.ph)*.18;}
+  bg.attributes.position.needsUpdate=true;
+  const dpA=dg.attributes.position.array;
+  for(let i=0;i<DN;i++){const d=dd[i];
+    dpA[i*3]=d.x+Math.sin(a*d.sp+d.ph)*.15;dpA[i*3+1]=d.y+Math.cos(a*d.sp*.6+d.ph)*.12;}
+  dg.attributes.position.needsUpdate=true;
+  drawBG(a);bgT.needsUpdate=true;
+  pl1.position.x=2.5+Math.sin(a)*.4;pl1.intensity=.7+Math.sin(a*2)*.15;
+  composer.render();
+}
+
+/* capture */
+let busy=false;
+async function capture(){
+  if(busy)return;busy=true;
+  document.getElementById('btn').disabled=true;
+  document.getElementById('btn').textContent='⏳ Rendering...';
+  const stream=R.domElement.captureStream(0);
+  const rec=new MediaRecorder(stream,{mimeType:'video/webm;codecs=vp9',videoBitsPerSecond:12e6});
+  const chunks=[];
+  rec.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
+  rec.onstop=()=>{
+    const blob=new Blob(chunks,{type:'video/webm'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    a.download='glass_sphere.webm';a.click();
+    document.getElementById('ui').textContent='✅ Done! WebM downloading...';
+    document.getElementById('btn').textContent='✅ Done';
+  };
+  rec.start();
+  for(let f=0;f<TOTAL;f++){
+    frame(f);
+    const vt=stream.getVideoTracks()[0];if(vt&&vt.requestFrame)vt.requestFrame();
+    document.getElementById('ui').textContent=`Frame ${f+1}/${TOTAL} (${((f/TOTAL)*100).toFixed(1)}%)`;
+    document.getElementById('bar').style.width=((f/TOTAL)*100)+'%';
+    await new Promise(r=>setTimeout(r,5));
+  }
+  rec.stop();
+}
+
+/* preview */
+let pf=0;
+(function loop(){if(!busy){frame(pf%TOTAL);pf++}requestAnimationFrame(loop)})();
+document.getElementById('ui').textContent='Preview running. Click Start Capture.';
+</script>
+</body>
+</html>
