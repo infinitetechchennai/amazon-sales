@@ -893,7 +893,7 @@ function TiltDashboard() {
             loop 
             muted 
             playsInline 
-            className="w-full object-cover pointer-events-none" 
+            className="w-full h-full object-cover pointer-events-none scale-[1.08] origin-center" 
           />
           {/* Glare effect */}
           <motion.div
