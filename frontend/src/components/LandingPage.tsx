@@ -1,4 +1,4 @@
-import { motion, useInView } from 'motion/react';
+import { motion, useInView, useMotionValue, useTransform, useSpring } from 'motion/react';
 import React, { useRef } from 'react';
 import { ArrowRight } from 'lucide-react';
 import Marquee from 'react-fast-marquee';
@@ -440,16 +440,7 @@ export default function LandingPage({ onGetStarted, onTryFree, onLogin, onGoogle
                  </p>
                </div>
             </motion.div>
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full relative group"
-            >
-              <div className="absolute inset-0 bg-white/20 rounded-[24px] blur-xl group-hover:blur-2xl transition-all duration-700 opacity-0 group-hover:opacity-100 mix-blend-overlay"></div>
-              <img src="/dashboard_mockup.png" alt="Dashboard" className="w-full rounded-[24px] shadow-2xl object-cover border border-white/10 relative z-10" />
-            </motion.div>
+            <TiltDashboard />
           </section>
 
           {/* 3. Clients Section (Transparent) */}
@@ -839,5 +830,81 @@ export default function LandingPage({ onGetStarted, onTryFree, onLogin, onGoogle
         </main>
       </div>
     </div>
+  );
+}
+
+function TiltDashboard() {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  
+  const mouseXSpring = useSpring(x, { stiffness: 100, damping: 20 });
+  const mouseYSpring = useSpring(y, { stiffness: 100, damping: 20 });
+  
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
+  const glareX = useTransform(mouseXSpring, [-0.5, 0.5], ["100%", "0%"]);
+  const glareY = useTransform(mouseYSpring, [-0.5, 0.5], ["100%", "0%"]);
+  
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+  };
+  
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+      className="w-full relative group cursor-crosshair"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ perspective: 1500 }}
+    >
+      <motion.div 
+        className="w-full relative"
+        style={{
+          rotateX,
+          rotateY,
+          transformStyle: "preserve-3d"
+        }}
+      >
+        <div 
+          className="absolute inset-0 bg-primary/20 rounded-[24px] blur-2xl group-hover:blur-3xl transition-all duration-700 opacity-50 group-hover:opacity-100"
+          style={{ transform: "translateZ(-30px)" }}
+        />
+        
+        <div className="relative overflow-hidden rounded-[24px] border border-white/10 shadow-2xl z-10" style={{ transform: "translateZ(10px)" }}>
+          <video 
+            src="/Dashboard_video.mp4" 
+            autoPlay 
+            loop 
+            muted 
+            playsInline 
+            className="w-full object-cover pointer-events-none" 
+          />
+          {/* Glare effect */}
+          <motion.div
+            className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+            style={{
+              background: "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 60%)",
+              backgroundPosition: useTransform(() => `${glareX.get()} ${glareY.get()}`)
+            }}
+          />
+        </div>
+      </motion.div>
+    </motion.div>
   );
 }
