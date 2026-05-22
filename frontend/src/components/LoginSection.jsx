@@ -555,20 +555,20 @@ const LoginSection = ({ onLogin, initialView = "plans", prefillData = null }) =>
               SellerIQ<span style={{ color: "#60a5fa" }}>Pro</span>
             </h1>
             <p style={{ color: "rgba(255, 255, 255, 0.6)", fontSize: 14, marginBottom: 40, maxWidth: 380, lineHeight: 1.65, fontWeight: 400 }}>
-              The definitive intelligence platform that gives e-commerce brands absolute clarity over revenue, risk, and growth.
+              The definitive intelligence platform that gives e-commerce brands absolute clarity over sales, risk, and growth.
             </p>
             <div>
               <div className="feature-item">
                 <div className="feature-icon-wrapper"><BarChart2 size={22} color="#60a5fa" /></div>
-                <div><div style={{ fontWeight: 700, color: "#fff", fontSize: 14, marginBottom: 3 }}>Real-Time Revenue Intelligence</div><div style={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}>Unified sales performance metrics across all marketplace channels.</div></div>
+                <div><div style={{ fontWeight: 700, color: "#fff", fontSize: 14, marginBottom: 3 }}>Real-time Intelligence</div><div style={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}>Deep insights into overall sales performance.</div></div>
               </div>
               <div className="feature-item">
                 <div className="feature-icon-wrapper"><ShieldCheck size={22} color="#fbbf24" /></div>
-                <div><div style={{ fontWeight: 700, color: "#fff", fontSize: 14, marginBottom: 3 }}>AI-Powered Risk Detection</div><div style={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}>Machine learning models that identify suspicious refund patterns instantly.</div></div>
+                <div><div style={{ fontWeight: 700, color: "#fff", fontSize: 14, marginBottom: 3 }}>Predictive Fraud Defense</div><div style={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}>Instantly identify high-risk return offenders.</div></div>
               </div>
               <div className="feature-item">
                 <div className="feature-icon-wrapper"><TrendingUp size={22} color="#34d399" /></div>
-                <div><div style={{ fontWeight: 700, color: "#fff", fontSize: 14, marginBottom: 3 }}>Predictive Revenue Forecasting</div><div style={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}>Momentum-based revenue projections and growth trajectory modeling.</div></div>
+                <div><div style={{ fontWeight: 700, color: "#fff", fontSize: 14, marginBottom: 3 }}>Algorithmic Forecasting</div><div style={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}>Data-driven revenue forecasting and growth trajectory modeling.</div></div>
               </div>
             </div>
           </div>

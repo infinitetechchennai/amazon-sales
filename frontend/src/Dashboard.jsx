@@ -1538,7 +1538,7 @@ const Dashboard = ({ rawData, filename, activePlan, source, session_id, fraudDat
                       {[
                         { icon: "📦", color: GREEN, title: "Restock Alert", body: `Top SKU "${stats.skuVelocity?.[0]?.sku || "—"}" moving at ${(stats.skuVelocity?.[0]?.dailyVelocity || 0).toFixed(1)}/day. Plan 30-day safety stock now.` },
                         { icon: "💰", color: BRAND, title: "Revenue Momentum", body: `30-day projection ${fmt(stats.forecast30)} signals ${(stats.forecast30 || 0) > (stats.totalRevenue || 0) ? "📈 growing" : "📉 softening"} demand.` },
-                        { icon: "🌍", color: PURPLE, title: "Regional Opportunity", body: `${stats.stateList?.[0]?.state || "Top state"} leads revenue. Targeted regional promos can amplify momentum.` },
+                        { icon: "🌍", color: PURPLE, title: "Regional Opportunity", body: `${stats.stateList?.[0]?.state ? stats.stateList[0].state.toLowerCase().replace(/\b\w/g, l => l.toUpperCase()) : "Maharashtra"} leads revenue. Targeted regional promos can amplify momentum.` },
                         { icon: "⚠️", color: RED, title: "Return Rate Watch", body: `Rate at ${parseFloat(stats.returnRate || 0).toFixed(1)}%. ${parseFloat(stats.returnRate) > 10 ? "⛔ Above threshold — investigate top-returning SKUs." : "✅ Healthy. Continue monitoring."}` },
                       ].map((ins, i) => (
                         <div key={i} style={{ display: "flex", gap: 12, padding: "12px 14px", background: ins.color + "08", borderRadius: 10, borderLeft: `3px solid ${ins.color}` }}>
@@ -1570,7 +1570,7 @@ const Dashboard = ({ rawData, filename, activePlan, source, session_id, fraudDat
             <h2 style={{ fontSize: 42, fontWeight: 900, marginBottom: 20, color: "#0f172a", letterSpacing: '-1px' }}>Empowering Enterprise Intelligence</h2>
             <p style={{ fontSize: 16, lineHeight: 1.8, color: "#475569", maxWidth: 700, margin: '0 auto' }}>
               SellerIQ Pro is a premier data analytics engine developed exclusively to bridge the gap between massive eCommerce datasets and actionable enterprise decision-making. 
-              Our mission is to equip brands with the fastest, most secure, and most intelligent toolkit for analyzing their marketplace and business-to-business pipelines.
+              Our mission is to equip brands with the fastest, most secure, and most intelligent toolkit for analyzing their marketplace and B2B pipelines.
             </p>
           </div>
 
@@ -1588,7 +1588,7 @@ const Dashboard = ({ rawData, filename, activePlan, source, session_id, fraudDat
                 <Shield size={32} />
               </div>
               <h3 style={{ fontSize: 20, fontWeight: 800, marginBottom: 12, color: '#0f172a' }}>Security First</h3>
-              <p style={{ fontSize: 14, color: "#64748b", lineHeight: 1.6 }}>Our SaaS platform processes analytical datasets seamlessly and at scale. We enforce robust encryption pipelines and SOC 2 compliance protocols to ensure that your sensitive financial data remains completely secure.</p>
+              <p style={{ fontSize: 14, color: "#64748b", lineHeight: 1.6 }}>Our SaaS platform processes analytical datasets seamlessly and at scale . We enforce robust encryption pipelines and SOC 2 compliance protocols to ensure that your sensitive financial data remains completely secure.</p>
             </div>
           </div>
 

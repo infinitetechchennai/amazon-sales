@@ -91,7 +91,7 @@ const generateInsights = (stats) => {
   if (stats.tax?.total > 0) {
     insights.push({
       title: "Tax Compliance Audit",
-      text: "GST reconciliation is fully synched with MTR data. Statutory liquidity remains within optimal thresholds.",
+      text: "GST reconciliation is fully synchronized with MTR data. Statutory liquidity remains within optimal thresholds.",
       type: "success", category: "Finance", confidence: 100
     });
   }

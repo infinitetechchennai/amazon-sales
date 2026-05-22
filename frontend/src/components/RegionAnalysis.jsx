@@ -190,8 +190,8 @@ const RegionAnalysis = ({ stats, styles = {} }) => {
            </div>
            <h3 style={{ fontSize: 20, fontWeight: 900, marginBottom: 12 }}>Regional Intelligence</h3>
            <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.6, marginBottom: 24 }}>
-              Your logistics network is currently concentrated in <b>{stats.stateList?.[0]?.state}</b>. 
-               {stats.stateList?.[1] ? ` Expanding secondary distribution nodes into ${stats.stateList[1].state} could reduce average transit times by up to 18%.` : ""}
+              Your logistics network is currently concentrated in <b>{stats.stateList?.[0]?.state ? stats.stateList[0].state.toLowerCase().replace(/\b\w/g, l => l.toUpperCase()) : "Maharashtra"}</b>. 
+               {stats.stateList?.[1] ? ` Expanding secondary distribution nodes into ${stats.stateList[1].state.toLowerCase().replace(/\b\w/g, l => l.toUpperCase())} could reduce average transit times by up to 18%.` : ""}
            </p>
            <button 
              onClick={() => setShowMap(!showMap)} 
