@@ -893,8 +893,13 @@ function TiltDashboard() {
             loop 
             muted 
             playsInline 
-            className="w-full h-full object-cover pointer-events-none scale-[1.08] origin-center" 
+            className="w-full h-full object-cover pointer-events-none" 
           />
+          {/* Badge to cover bottom-right watermark without zooming */}
+          <div className="absolute bottom-4 right-4 z-20 flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/20 bg-black/80 backdrop-blur-md shadow-lg">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+            <span className="text-white/90 text-[10px] font-bold tracking-wider uppercase">Live Dashboard</span>
+          </div>
           {/* Glare effect */}
           <motion.div
             className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
